@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
+use EndaEditor;
+
 class AdminController extends Controller
 {
     /**

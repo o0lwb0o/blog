@@ -1,42 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    <link rel="stylesheet" href="{{ URL::asset('static/editor/themes/default/default.css') }}" />
-    <link rel="stylesheet" href="{{ URL::asset('static/editor/plugins/code/prettify.css') }}" />
-    <script charset="utf-8" src="{{ URL::asset('static/editor/kindeditor.js') }}"></script>
-    <script charset="utf-8" src="{{ URL::asset('static/editor/lang/zh_CN.js') }}"></script>
-    <script charset="utf-8" src="{{ URL::asset('static/editor/plugins/code/prettify.js') }}"></script>
-    <script>
-        KindEditor.ready(function(K) {
-            var editor1 = K.create('textarea[name="content"]', {
-                    items:[
-                        'source', '|', 'undo', 'redo', '|', 'preview','template', 'code', 'cut', 'copy', 'paste',
-                        'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
-                        'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-                        'superscript', 'clearhtml', 'quickformat', 'selectall', '|', '/',
-                        'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-                        'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
-                        'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'pagebreak',
-                        'anchor', 'link', 'unlink'
-                    ],
-                    cssPath : '/static/editor/plugins/code/prettify.css',
-                    uploadJson : '',
-//            fileManagerJson : '',
-                filePostName:"file",
-                allowFileManager : true,
-                afterCreate : function() {
-                var self = this;
-                K.ctrl(document, 13, function() {
-                    self.sync();
-                });
-                K.ctrl(self.edit.doc, 13, function() {
-                    self.sync();
-                });
-            }
-        });
-            prettyPrint();
-        });
-    </script>
+    @include('editor::head')
     <form class="layui-form layui-form-pane1" name="example" action="{:url('articlePost')}" method="post">
         <input type="hidden" name="act" value="add">
         <div class="layui-form-item">
@@ -83,10 +48,8 @@
         </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">文章</label>
-            <div class="layui-input-block">
-            <textarea  name="content"  style="width:90%;height:400px;visibility:hidden;">
-
-            </textarea>
+            <div class="layui-input-block editor">
+            <textarea  name="content"  id='myEditor' ></textarea>
             </div>
         </div>
         <input type="hidden" name="pic" value="" id="pic_upload">

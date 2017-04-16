@@ -27,6 +27,7 @@ class ArticleController extends AdminController
     {
         $list = $this->article->getList();
         return view('admin.article',['list'=>$list]);
+//        return view('admin.articleeidt',['list'=>$list]);
     }
 
     public function add(){

@@ -10,8 +10,7 @@ Route::any('loginPost','LoginController@login');
 Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('/','HomeController@index');
     Route::get('blogger','HomeController@blogger');
-    Route::get('uplode','HomeController@uplode');
-    Route::post('uplode','HomeController@uplode');
+    Route::post('uploads','HomeController@upload');
     Route::get('getMenu/{id}','MenuController@getMenu')->where('id', '[0-9]+');
 
     Route::get('menu/getlist','MenuController@getList');
