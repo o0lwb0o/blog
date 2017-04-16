@@ -11,6 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+Route::get('/prompt',function (){
+
+    return view('admin.prompt');
+});
+//后台
+Route::group(['namespace' => 'Admin','prefix' => 'admin'], function(){
+    include 'admin.php';
+});
+//前台
+Route::group(['namespace' => 'Web'], function(){
+    include 'liu.php';
 });
