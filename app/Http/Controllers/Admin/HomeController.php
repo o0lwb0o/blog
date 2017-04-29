@@ -9,8 +9,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\ApiCode;
+use think\console\Input;
 use Validator;
+
+
 
 class HomeController extends  AdminController
 {
@@ -36,7 +38,7 @@ class HomeController extends  AdminController
     public function upload(Request $request)
     {
 
-        $code = 0;
+        $code = 1;
         $msg = '未知錯誤';
         $url = '';
         $time = date('Ymd');
@@ -45,7 +47,7 @@ class HomeController extends  AdminController
         is_dir($dir) || mkdir($path.'/'.$dir,0777,true);  //如果不存在则创建目录
         do {
             if (!$request->hasFile('image')) {
-
+                $code = 1;
                 break;
             }
 
@@ -59,6 +61,7 @@ class HomeController extends  AdminController
             ];
             $validator = Validator::make($data, $rules, $messages);
             if (!$validator->passes()) {
+                $code = 1;
                 $msg = $validator->messages();
                 break;
             }
@@ -66,23 +69,25 @@ class HomeController extends  AdminController
             $ext = $file->getClientOriginalExtension();
             $check_ext = in_array($ext, ['gif', 'jpg', 'png'], true);
             if (!$check_ext) {
+                $code = 1;
                 $msg = '文件类型不允许,请上传常规的图片（gif|jpg|png）文件';
                 break;
             }
             $fileName = md5(uniqid().time()).$ext;
             $fullfilename = '/'.$dir.'/'.$fileName;  //原始完整路径
             if (!$file->isValid()) {
+                $code = 1;
                 $msg = '文件校验失败';
                 break;
             }
             $uploadSuccess = $file->move($path.'/'.$dir, $fileName);  //移动文件
             $oFilePath = $dir.'/'.$fileName;
-            $code = 1;
+            $code = 0;
             $msg = '上传成功';
             $url = $fullfilename;
         } while(false);
         $json = [
-            'success' => $code,
+            'status' => $code,
             'message' => $msg,
             'url' => $url,
         ];

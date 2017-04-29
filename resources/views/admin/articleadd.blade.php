@@ -2,11 +2,12 @@
 
 @section('content')
     @include('editor::head')
-    <form class="layui-form layui-form-pane1" name="example" action="{:url('articlePost')}" method="post">
+    <form class="layui-form layui-form-pane1" name="example" action="{{url('admin/article/articlePost')}}" method="post">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
         <input type="hidden" name="act" value="add">
         <div class="layui-form-item">
             <label class="layui-form-label">所属栏目</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <select name="pid" lay-verify="required" lay-search="">
                     <option value="0">请选择</option>
                     @foreach ($list as $key=>$vo)
@@ -17,33 +18,33 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">标题</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">关键字</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input type="text" name="keyword" placeholder="请输入关键字" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">列表图</label>
-            <div class="site-demo-upbar">
-                <input name="file" class="layui-upload-file" id="test" type="file">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label"></label>
-            <div class="layui-input-inline" id="pics">
+        {{--<div class="layui-form-item">--}}
+            {{--<label class="layui-form-label">列表图</label>--}}
+            {{--<div class="layui-input-block">--}}
+                {{--<input name="file" class="layui-upload-file" id="test" type="file">--}}
+            {{--</div>--}}
+        {{--</div>--}}
+        {{--<div class="layui-form-item">--}}
+            {{--<label class="layui-form-label"></label>--}}
+            {{--<div class="layui-input-inline" id="pics">--}}
 
-            </div>
-        </div>
+            {{--</div>--}}
+        {{--</div>--}}
         <div class="layui-form-item">
             <label class="layui-form-label">摘要</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入摘要" style="width:90%;" name="abstract" class="layui-textarea"></textarea>
+                <textarea placeholder="请输入摘要" style="width:55%;" name="abstract" class="layui-textarea"></textarea>
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
@@ -69,9 +70,9 @@
                 , laydate = layui.laydate;
 
             layui.upload({
-                    url: '{{url('admin/uplode')}}'
+                    url: '{{url('admin/uploads')}}'
                 , elem:'#test' //指定原始元素，默认直接查找class="layui-upload-file"
-                , method:'get' //上传接口的http类型
+                , method:'post' //上传接口的http类型
                 , ext:'jpg|png|gif'
                 , success: function (res) {
                     $('#pic_upload').val(res.urls);

@@ -3,13 +3,12 @@
 
 Route::get('login','LoginController@showLoginForm');
 Route::any('loginPost','LoginController@login');
-//Route::get('login','HomeController@login');
-//Route::any('loginPost','HomeController@loginPost');
 
 
 Route::group(['middleware' => 'auth.admin'], function () {
     Route::get('/','HomeController@index');
     Route::get('blogger','HomeController@blogger');
+    Route::get('uploads','HomeController@upload');
     Route::post('uploads','HomeController@upload');
     Route::get('getMenu/{id}','MenuController@getMenu')->where('id', '[0-9]+');
 

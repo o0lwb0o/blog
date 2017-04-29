@@ -6,6 +6,8 @@
  * Time: 10:44
  */
 
-Route::get('/', function () {
-    return '';
-});
+Route::get('/','HomeController@index');
+Route::get('/{page}','HomeController@index')->where('id', '[0-9]+');
+Route::get('column/{id}','ColumnController@getList')->where('id', '[0-9]+');
+Route::get('article/{id}','ArticleController@getList')->where('id', '[0-9]+');
+Route::get('getinfo/{id}','ArticleController@getInfo')->where('id', '[0-9]+');

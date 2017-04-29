@@ -17,25 +17,27 @@
             <tr>
                 <td class='text-center'>
                     <fieldset class="layui-elem-field">
-                        <legend>{$vo.title}</legend>
+                        <legend>{{$vo->title}}</legend>
                         <div class="layui-field-box">
                             <div class="pull-left layui-inline">
-                                {if $vo.title_pic}
-                                <img style="height: 60px" src="/uploads/article/{$vo.title_pic}" class="layui-circle">
-                                {else}
+                                @if (!empty( $vo->title_pic))
+                                <img style="height: 60px" src="/uploads/article/{{$vo->title_pic}}" class="layui-circle">
+                                @else
                                 <img style="height: 60px" src="/static/images/admin/timg.jpg" class="layui-circle">
-                                {/if}
+                                @endif
                             </div>
-                            {$vo.abstract}
+                            <div class="pull-left">
+                                {{$vo->abstract}}
+                            </div>
                         </div>
                         </div>
                     </fieldset>
 
                 </td>
                 <td class='text-center nowrap'>
-                    <a class="layui-btn layui-btn-small layui-btn-normal" target="_blank" href="{:url('article/index',array('tid'=>$vo.id))}"><i class="layui-icon">&#xe641;</i></a>
-                    <a class="layui-btn layui-btn-small layui-btn-normal" href="{:url('eidt',array('id'=>$vo.id))}"><i class="layui-icon">&#xe642;</i></a>
-                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:delcfm($vo.id);"><i class="layui-icon">&#xe640;</i></a>
+                    <a class="layui-btn layui-btn-small layui-btn-normal" target="_blank" href="{{url('article/index',array('tid'=>$vo->id))}}"><i class="layui-icon">&#xe641;</i></a>
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="{{url('admin/article/eidt',['id'=>$vo->id])}}"><i class="layui-icon">&#xe642;</i></a>
+                    <a class="layui-btn layui-btn-small layui-btn-normal" href="javascript:delcfm({{$vo->id}});"><i class="layui-icon">&#xe640;</i></a>
                 </td>
             </tr>
             @endforeach
@@ -46,7 +48,7 @@
     <script>
         function delcfm(id) {
             if (confirm("确认要删除？")) {
-                window.location.href="{:url('del','',false)}/id/"+id;
+                window.location.href="{{url('admin/article/del',['id'=>"+id+"])}}";
             }
         }
         layui.use(['laypage', 'layer'], function(){

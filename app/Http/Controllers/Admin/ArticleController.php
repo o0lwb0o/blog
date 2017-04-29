@@ -27,7 +27,6 @@ class ArticleController extends AdminController
     {
         $list = $this->article->getList();
         return view('admin.article',['list'=>$list]);
-//        return view('admin.articleeidt',['list'=>$list]);
     }
 
     public function add(){
@@ -40,8 +39,9 @@ class ArticleController extends AdminController
     public function eidt($id){
         $where = array();
         $where['id'] = $id;
+        $data = $this->column->getList();
         $list = $this->article->getOne($where);
-        return view('admin.articleeidt',['list'=>$list]);
+        return view('admin.articleeidt',['list'=>$data,'data'=>$list]);
     }
 
     public function del($id)
@@ -71,15 +71,25 @@ class ArticleController extends AdminController
             }
             $act = $request->input('act');
 
-            $name = $request->input('name');
-            $info = $request->input('info');
-            if(empty($name) || empty($act)) {
+            $pid = $request->input('pid');
+            $title = $request->input('title');
+            $keyword = $request->input('keyword');
+            $abstract = $request->input('abstract');
+            $content = $request->input('content');
+            if(empty($pid) || empty($title)|| empty($keyword)|| empty($abstract)|| empty($content)|| empty($act)) {
+                $code = ApiCode::CODE_1002_TYPE;
                 break;
             }
             if ($act == 'add') {
                 $data = array();
-                $data['name'] = $name;
-                $data['info'] = $info?$info:'';
+                $data['title'] = $title;
+                $data['content'] = $content;
+                $data['column_id'] = $pid;
+                $data['keyword'] = $keyword;
+                $data['abstract'] = $abstract;
+                $data['user_id'] = Auth::guard('admin')->id();
+                $data['addtime'] = time();
+
                 $ret = $this->article->add($data);
                 if (!$ret) {
                     $url = url('admin/article/add');
@@ -90,11 +100,15 @@ class ArticleController extends AdminController
 
                 $id = $request->input('id', '');
                 $data = array();
-                $data['name'] = $name;
-                $data['info'] = $info?$info:'';
+                $data['title'] = $title;
+                $data['content'] = $content;
+                $data['column_id'] = $pid;
+                $data['keyword'] = $keyword;
+                $data['abstract'] = $abstract;
+                $data['uptime'] = time();
                 $ret = $this->article->eidt(array('id'=>$id),$data);
                 if (!$ret) {
-                    $url = url('admin/article/eidt');
+                    $url = url('admin/article/eidt',['id'=>$id]);
                     $code = ApiCode::CODE_9999_TYPE;
                     break;
                 }

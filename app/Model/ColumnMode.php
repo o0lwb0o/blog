@@ -77,6 +77,22 @@ class ColumnMode extends MyModel
         return $ret;
     }
 
+    /**获取一条信息单一字段
+     * @param $where
+     * @param $key
+     * @return bool
+     */
+    public function firstOne($where,$key)
+    {
+        if (empty($where) || empty($key)) {
+            return false;
+        }
+        $obj =  DB::table($this->table);
+        $obj = $this->myWhere($obj,$where);
+        $ret = $obj ->pluck($key);
+        return $ret;
+    }
+
     /**移除数据
      * @param $where
      * @return bool|int

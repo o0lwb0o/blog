@@ -41,7 +41,12 @@ class ArticleMode extends MyModel
         if (empty($where) || empty($data)) {
             return false;
         }
-        $ret = DB::table($this->table)->where($where)->update($data);
+//        DB::connection()->enableQueryLog();
+        $obj =  DB::table($this->table);
+        $obj = $this->myWhere($obj,$where);
+        $ret = $obj->update($data);
+//        $query = DB::getQueryLog();
+//        dump($query);
         return $ret;
     }
 
@@ -51,12 +56,13 @@ class ArticleMode extends MyModel
      * @param string $order
      * @return array
      */
-    public function getList($where=array(), $field = array('*'), $order = array('id','asc'))
+    public function getList($where=array(), $field = array('*'), $order = array('id','asc'),$offset = 0, $limt = 10)
     {
         $obj =  DB::table($this->table);
         $obj = $this->myWhere($obj,$where);
         $obj = $this->myOrderBy($obj,$order);
-        $ret = $obj->select($field)->get();
+
+        $ret = $obj->select($field)->skip(0)->take($limt)->get();
         return $ret;
     }
 
@@ -77,6 +83,24 @@ class ArticleMode extends MyModel
         return $ret;
     }
 
+    /**获取一条信息单一字段
+     * @param $where
+     * @param $key
+     * @return bool
+     */
+    public function firstOne($where,$key)
+    {
+        if (empty($where) || empty($key)) {
+            return false;
+        }
+        $obj =  DB::table($this->table);
+        $obj = $this->myWhere($obj,$where);
+        $ret = $obj ->pluck($key);
+        return $ret;
+    }
+
+
+
     /**移除数据
      * @param $where
      * @return bool|int
@@ -89,6 +113,22 @@ class ArticleMode extends MyModel
         $obj =  DB::table($this->table);
         $obj = $this->myWhere($obj,$where);
         $ret = $obj->delete();
+        return $ret;
+    }
+
+    /**
+     * 統計
+     * @param $where
+     * @return bool
+     */
+    public function getCount($where)
+    {
+        if (empty($where)) {
+            return false;
+        }
+        $obj =  DB::table($this->table);
+        $obj = $this->myWhere($obj,$where);
+        $ret = $obj->count();
         return $ret;
     }
 }
